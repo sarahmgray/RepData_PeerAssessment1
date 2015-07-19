@@ -1,0 +1,37 @@
+---
+title: "Peer Assessment 1"
+output: html_document
+---
+
+#Assignment
+All code and results are visible in this document
+--```{r setoptions,echo=TRUE}
+--opts_chunk$set(echo = TRUE, results = "asis")
+--```
+##Loading and preprocessing the data
+This code will load the data.
+
+```{r load_data}
+activity <- read.csv(file="activity.csv",header = TRUE,sep = ",")
+```
+
+This code preprocesses the data.
+
+```{r preprocess_data}
+library(dplyr)
+sorted <- arrange(activity, interval)
+library(tidyr)
+tidydata <- sorted %>% spread(interval, steps)
+```
+##Mean total number of steps taken per day
+1. Calculate total number of steps per day
+```{r total_steps}
+totalsteps <- tidydata %>% mutate(Total = rowSums(.[2:289]))
+totaltable <- totalsteps[,c('date','Total')]
+```
+Show the total number of steps each day.
+```{r showtable,results='asis'}
+library(xtable)
+xt <- xtable(totaltable)
+print(xt, type = "html")
+```

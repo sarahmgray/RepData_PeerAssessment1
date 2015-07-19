@@ -7,16 +7,53 @@ output:
 
 
 ## Loading and preprocessing the data
+Load the data.
 
-
-
+```{r load_data}
+activity <- read.csv(file="activity.csv",header = TRUE,sep = ",")
+```
+Make a tidy data set.
+```{r preprocess_data}
+library(dplyr)
+sorted <- arrange(activity, interval)
+library(tidyr)
+tidydata <- sorted %>% spread(interval, steps)
+tidydata2 <- activity %>% spread(date, steps)
+```
 ## What is mean total number of steps taken per day?
-
-
-
+1. Calculate total number of steps per day
+```{r total_steps}
+totalsteps <- tidydata %>% mutate(Total = rowSums(.[2:289]))
+totaltable <- totalsteps[,c('date','Total')]
+```
+Show the total number of steps each day.
+```{r showtable,results='asis'}
+library(xtable)
+xt <- xtable(totaltable)
+print(xt, type = "html")
+```
+2. Make a histogram of the total number of steps taken each day
+```{r histogramtotal}
+hist(xt$Total, main = "Frequency of Total Steps Per Day", xlab = "Steps Per Day", plot = TRUE)
+```
+3. Calculate and Report the mean and median of the total number of steps taken per day
+Calculate the mean.
+```{r mean}
+Mean <- mean(xt$Total, na.rm=TRUE)
+print(Mean)
+```
+Calculate the Median
+```{r median}
+Median <- median(xt$Total, na.rm=TRUE)
+print(Median)
+```
 ## What is the average daily activity pattern?
-
-
+1. Make a time series plot of the five minute interval and the average number of steps taken, averaged across all days (y-axis).
+```{r IntervalAverage}
+IntervalAverage <- tidydata2 %>% mutate(Average = rowMeans(.[2:62], na.rm=TRUE))
+AverageTable <- IntervalAverage[,c('interval','Average')]
+AveragePlot <- plot(AverageTable, type="l", main='Average Daily Activity Pattern')
+```
 
 ## Imputing missing values
 
