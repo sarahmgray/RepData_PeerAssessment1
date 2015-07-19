@@ -54,9 +54,24 @@ IntervalAverage <- tidydata2 %>% mutate(Average = rowMeans(.[2:62], na.rm=TRUE))
 AverageTable <- IntervalAverage[,c('interval','Average')]
 AveragePlot <- plot(AverageTable, type="l", main='Average Daily Activity Pattern')
 ```
-
+2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+```{r Max Interval}
+MaximumInterval <- AverageTable[rev(order(AverageTable$Average)),]
+print(MaximumInterval[1,1])
+```
 ## Imputing missing values
-
-
-
+1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+```{r TotalMissing}
+Missing <- length(which(is.na(activity)))
+print(Missing)
+```
+2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+The NAs will be replaced with the Mean calculated earlier.
+```{r ReplaceNA}
+NoMissing <- activity %>% mutate_each(funs(replace(.,is.na(.), Mean)))
+```
+3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+```{r MissingData}
+print(NoMissing)
+```
 ## Are there differences in activity patterns between weekdays and weekends?
