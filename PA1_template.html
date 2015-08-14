@@ -103,7 +103,7 @@ totaltable &lt;- totalsteps[,c('date','Total')]</code></pre>
 xt &lt;- xtable(totaltable)
 print(xt, type = &quot;html&quot;)</code></pre>
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Fri Aug 14 16:21:00 2015 -->
+<!-- Fri Aug 14 16:36:04 2015 -->
 <table border="1">
 <tr>
 <th>
@@ -823,7 +823,7 @@ print(Missing)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.</li>
 </ol>
-<p>The NAs will be replaced with the mean of all values in the steps column.</p>
+<p>The Mean for each day was calculated with the NAs removed. The 61 values were then averaged and the Overall Average is used to replace the NAs.</p>
 <pre class="r"><code>AverageSteps &lt;- tidydata %&gt;% mutate(Average = rowMeans(.[2:289]))
 OverallAverage &lt;- summarise(AverageSteps, avg = mean(Average, na.rm = TRUE))
 print(OverallAverage)</code></pre>

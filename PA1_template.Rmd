@@ -89,7 +89,7 @@ print(Missing)
 
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
-The NAs will be replaced with the mean of all values in the steps column.
+The Mean for each day was calculated with the NAs removed.  The 61 values were then averaged and the Overall Average is used to replace the NAs.
 
 ```{r ReplaceNA, echo=TRUE}
 AverageSteps <- tidydata %>% mutate(Average = rowMeans(.[2:289]))

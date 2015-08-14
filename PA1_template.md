@@ -60,7 +60,7 @@ print(xt, type = "html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Fri Aug 14 16:21:00 2015 -->
+<!-- Fri Aug 14 16:36:04 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> Total </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 2012-10-01 </td> <td align="right">  </td> </tr>
@@ -202,7 +202,7 @@ print(Missing)
 
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
-The NAs will be replaced with the mean of all values in the steps column.
+The Mean for each day was calculated with the NAs removed.  The 61 values were then averaged and the Overall Average is used to replace the NAs.
 
 
 ```r
