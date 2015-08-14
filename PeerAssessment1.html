@@ -66,7 +66,9 @@ img {
 
 <div id="assignment" class="section level1">
 <h1>Assignment</h1>
-<p>All code and results are visible in this document –<code>{r setoptions,echo=TRUE} --opts_chunk$set(echo = TRUE, results = &quot;asis&quot;) --</code> ##Loading and preprocessing the data This code will load the data.</p>
+<div id="loading-and-preprocessing-the-data" class="section level2">
+<h2>Loading and preprocessing the data</h2>
+<p>This code will load the data.</p>
 <pre class="r"><code>activity &lt;- read.csv(file=&quot;activity.csv&quot;,header = TRUE,sep = &quot;,&quot;)</code></pre>
 <p>This code preprocesses the data.</p>
 <pre class="r"><code>library(dplyr)</code></pre>
@@ -83,6 +85,7 @@ img {
 <pre class="r"><code>sorted &lt;- arrange(activity, interval)
 library(tidyr)
 tidydata &lt;- sorted %&gt;% spread(interval, steps)</code></pre>
+</div>
 <div id="mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>Mean total number of steps taken per day</h2>
 <ol style="list-style-type: decimal">
@@ -95,7 +98,7 @@ totaltable &lt;- totalsteps[,c('date','Total')]</code></pre>
 xt &lt;- xtable(totaltable)
 print(xt, type = &quot;html&quot;)</code></pre>
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Wed Jul 15 16:02:36 2015 -->
+<!-- Wed Aug 12 14:23:30 2015 -->
 <table border="1">
 <tr>
 <th>

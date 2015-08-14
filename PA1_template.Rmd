@@ -9,69 +9,113 @@ output:
 ## Loading and preprocessing the data
 Load the data.
 
-```{r load_data}
+```{r load_data, echo=TRUE}
 activity <- read.csv(file="activity.csv",header = TRUE,sep = ",")
 ```
 Make a tidy data set.
-```{r preprocess_data}
+```{r preprocess_data, echo=TRUE}
+library(plyr)
 library(dplyr)
 sorted <- arrange(activity, interval)
 library(tidyr)
 tidydata <- sorted %>% spread(interval, steps)
 tidydata2 <- activity %>% spread(date, steps)
 ```
+
 ## What is mean total number of steps taken per day?
+
 1. Calculate total number of steps per day
-```{r total_steps}
+
+```{r total_steps, echo=TRUE}
 totalsteps <- tidydata %>% mutate(Total = rowSums(.[2:289]))
 totaltable <- totalsteps[,c('date','Total')]
 ```
+
 Show the total number of steps each day.
-```{r showtable,results='asis'}
+
+```{r showtable,results='asis', echo=TRUE}
 library(xtable)
 xt <- xtable(totaltable)
 print(xt, type = "html")
 ```
+
 2. Make a histogram of the total number of steps taken each day
-```{r histogramtotal}
+
+```{r histogramtotal, echo=TRUE}
 hist(xt$Total, main = "Frequency of Total Steps Per Day", xlab = "Steps Per Day", plot = TRUE)
 ```
+
 3. Calculate and Report the mean and median of the total number of steps taken per day
+
 Calculate the mean.
-```{r mean}
+
+```{r mean, echo=TRUE}
 Mean <- mean(xt$Total, na.rm=TRUE)
 print(Mean)
 ```
+
 Calculate the Median
-```{r median}
+
+```{r median, echo=TRUE}
 Median <- median(xt$Total, na.rm=TRUE)
 print(Median)
 ```
+
 ## What is the average daily activity pattern?
+
 1. Make a time series plot of the five minute interval and the average number of steps taken, averaged across all days (y-axis).
+
 ```{r IntervalAverage}
-IntervalAverage <- tidydata2 %>% mutate(Average = rowMeans(.[2:62], na.rm=TRUE))
+IntervalAverage <- tidydata2 %>% mutate(Average = rowMeans(.[,2:62], na.rm = TRUE))
 AverageTable <- IntervalAverage[,c('interval','Average')]
 AveragePlot <- plot(AverageTable, type="l", main='Average Daily Activity Pattern')
 ```
+
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r Max Interval}
+
+```{r MaxInterval, echo=TRUE}
 MaximumInterval <- AverageTable[rev(order(AverageTable$Average)),]
 print(MaximumInterval[1,1])
 ```
+
 ## Imputing missing values
+
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r TotalMissing}
+
+```{r TotalMissing, echo=TRUE}
 Missing <- length(which(is.na(activity)))
 print(Missing)
 ```
+
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-The NAs will be replaced with the Mean calculated earlier.
-```{r ReplaceNA}
-NoMissing <- activity %>% mutate_each(funs(replace(.,is.na(.), Mean)))
+
+The NAs will be replaced with the mean of all values in the steps column.
+
+```{r ReplaceNA, echo=TRUE}
+AverageSteps <- tidydata %>% mutate(Average = rowMeans(.[2:289]))
+OverallAverage <- summarise(AverageSteps, avg = mean(Average, na.rm = TRUE))
+print(OverallAverage)
+activity[is.na(activity)] <- OverallAverage
 ```
+
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
-```{r MissingData}
-print(NoMissing)
+
+```{r MissingData, echo=TRUE}
+NewDataSet <- activity
+head(NewDataSet)
 ```
+
+4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+```{r HistogramNoNA, echo=TRUE}
+#sorted2 <- arrange(NewDataSet, interval)
+#tidydata3 <- sorted2 %>% spread(interval, steps)
+#totalsteps2 <- tidydata3 %>% mutate(TotalNoNA = rowSums(.[2:289]))
+#totaltable2 <- totalsteps2[,c('date','TotalNoNA')]
+#hist(totaltable2, main = "Frequency of Total Steps Per Day without Missing Values", xlab = "Steps Per Day", plot = TRUE)
+
+#totaltableNoNA <- totalstepsNoNA[,c('date','Total')]
+hist(xt$Total, main = "Frequency of Total Steps Per Day", xlab = "Steps Per Day", plot = TRUE)
+```
+
 ## Are there differences in activity patterns between weekdays and weekends?
